@@ -4,8 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const products = [
   { id: 1, name: "Laptop", price: 1200, stock: 5 },
-  { id: 2, name: "I-pad", price: 800, stock: 8 },
-  { id: 3, name: "Smartphone", price: 200, stock: 10 },
+  { id: 2, name: "Smartphone", price: 800, stock: 8 },
+  { id: 3, name: "Headphones", price: 200, stock: 10 },
 ];
 
 export default function Inventory() {
@@ -14,7 +14,7 @@ export default function Inventory() {
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.find((item) => item.id === product.id);
-      if (existingProduct ) {
+      if (existingProduct) {
         return prevCart.map((item) =>
           item.id === product.id && product.stock>item.quantity ? { ...item, quantity: item.quantity + 1 } : item
         );
@@ -22,6 +22,8 @@ export default function Inventory() {
       return [...prevCart, { ...product, quantity: 1 }];
     });
   };
+
+  const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <div className="container mt-4">
@@ -48,14 +50,17 @@ export default function Inventory() {
         {cart.length === 0 ? (
           <p className="text-muted">Your cart is empty.</p>
         ) : (
-          <ul className="list-group mt-2">
-            {cart.map((item) => (
-              <li key={item.id} className="list-group-item d-flex justify-content-between">
-                <span>{item.name} (x{item.quantity})</span>
-                <span>${item.price * item.quantity}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="list-group mt-2">
+              {cart.map((item) => (
+                <li key={item.id} className="list-group-item d-flex justify-content-between">
+                  <span>{item.name} (x{item.quantity})</span>
+                  <span>${item.price * item.quantity}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 fw-bold text-end"> <span className="">Total: </span> <span>${totalAmount}</span></div>
+          </>
         )}
       </div>
     </div>
